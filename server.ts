@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -13,11 +16,11 @@ const oauth = new OAuth2Server({
     model: {
         getAccessToken: async (token: string): Promise<Token | null> => {
             console.log('getAccessToken called with token:', token);
-            if (token === 'mock_token') {
+            if (token === process.env.ACCESS_TOKEN) {
                 return {
-                    accessToken: 'mock_token',
-                    client: { id: 'client_id', grants: ['password'] },
-                    user: { id: 'user_id' },
+                    accessToken: process.env.ACCESS_TOKEN,
+                    client: { id: process.env.CLIENT_ID, grants: ['password'] },
+                    user: { id: process.env.USER_ID },
                     accessTokenExpiresAt: new Date(Date.now() + 1000 * 60 * 5), // 5 minutes expiry
                 } as Token;
             }
@@ -25,9 +28,10 @@ const oauth = new OAuth2Server({
         },
         getClient: async (clientId: string, clientSecret: string): Promise<Client | null> => {
             console.log('getClient called with clientId:', clientId, 'clientSecret:', clientSecret);
-            if (clientId === 'client_id' && clientSecret === 'client_secret') {
+            console.log(`${process.env.CLIENT_ID}, ${process.env.CLIENT_SECRET}`)
+            if (clientId == process.env.CLIENT_ID && clientSecret == process.env.CLIENT_SECRET) {
                 return {
-                    id: 'client_id',
+                    id: process.env.CLIENT_ID,
                     grants: ['password'],
                 } as Client;
             }
@@ -36,16 +40,16 @@ const oauth = new OAuth2Server({
         saveToken: async (token: Token, client: Client, user: any): Promise<Token> => {
             console.log('saveToken called with token:', token, 'client:', client, 'user:', user);
             return {
-                accessToken: 'mock_token',
-                client: { id: 'client_id', grants: ['password'] },
-                user: { id: 'user_id' },
+                accessToken: process.env.ACCESS_TOKEN,
+                client: { id: process.env.CLIENT_ID, grants: ['password'] },
+                user: { id: process.env.USER_ID },
                 accessTokenExpiresAt: new Date(Date.now() + 10000), // 10 seconds expiry
             } as Token;
         },
         getUser: async (username: string, password: string): Promise<any> => {
             console.log('getUser called with username:', username, 'password:', password);
-            if (username === 'user' && password === 'password') {
-                return { id: 'user_id' };
+            if (username === process.env.USER_ID && password === process.env.PASSWORD_ID) {
+                return { id: process.env.USER_ID };
             }
             return null;
         },
