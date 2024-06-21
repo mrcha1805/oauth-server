@@ -67,6 +67,7 @@ const oauth = new OAuth2Server({
                 redirectUri: process.env.REDIRECT_URI,
                 client: { id: process.env.CLIENT_ID, grants: ['authorization_code'] },
                 user: { id: process.env.USER_ID },
+                token: process.env.TOKEN_ID
             } as AuthorizationCode;
         },
         revokeAuthorizationCode: async (code: AuthorizationCode): Promise<boolean> => {
@@ -89,6 +90,7 @@ const oauth = new OAuth2Server({
 
 // Route to handle the authorization request
 app.get('/oauth/authorize', (req: Request, res: Response) => {
+    console.log(req.query)
     const { response_type, client_id, redirect_uri, scope, state } = req.query;
 
     if (response_type !== 'code') {
