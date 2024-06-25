@@ -22,6 +22,7 @@ const oauth = new OAuth2Server({
                     client: { id: process.env.CLIENT_ID, grants: ['authorization_code'] },
                     user: { id: process.env.USER_ID },
                     accessTokenExpiresAt: new Date(Date.now() + 1000 * 60 * 5), // 5 minutes expiry
+                    token: process.env.TOKEN_ID
                 } as Token;
             }
             return null;
@@ -44,6 +45,7 @@ const oauth = new OAuth2Server({
                 client: { id: process.env.CLIENT_ID, grants: ['authorization_code'] },
                 user: { id: process.env.USER_ID },
                 accessTokenExpiresAt: new Date(Date.now() + 10000), // 10 seconds expiry
+                token: process.env.TOKEN_ID
             } as Token;
         },
         getAuthorizationCode: async (authorizationCode: string): Promise<AuthorizationCode | null> => {
@@ -66,8 +68,8 @@ const oauth = new OAuth2Server({
                 expiresAt: new Date(Date.now() + 1000 * 60 * 10), // 10 minutes expiry
                 redirectUri: process.env.REDIRECT_URI,
                 client: { id: process.env.CLIENT_ID, grants: ['authorization_code'] },
-                user: { id: process.env.USER_ID },
-                token: process.env.TOKEN_ID
+                user: { id: process.env.USER_ID }
+
             } as AuthorizationCode;
         },
         revokeAuthorizationCode: async (code: AuthorizationCode): Promise<boolean> => {
